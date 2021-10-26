@@ -1,4 +1,5 @@
 import { Repository, EntityRepository } from 'typeorm';
+import * as bcrypt from 'bcryptjs';
 import { User } from './user.entity';
 import { AuthCredentialDto } from './dto/auth-credential.dto';
 import {
@@ -10,7 +11,9 @@ import {
 export class UserRepository extends Repository<User> {
   async createUser(authCredentialDto: AuthCredentialDto): Promise<void> {
     const { username, password } = authCredentialDto;
-    const user = this.create({ username, password });
+    const salt = await bcrypt.getSalt();
+    const hashedPassword = await bcrypt.hash(password, salt);
+    const user = this.create({ username, password: hashedPassword });
     try {
       await this.save(user);
     } catch (e) {
