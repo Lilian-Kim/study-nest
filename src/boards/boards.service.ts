@@ -7,6 +7,7 @@ import { InjectRepository } from '@nestjs/typeorm';
 import { Board } from './board.entity';
 import { threadId } from 'worker_threads';
 import { BoardStatusValidationPipe } from './pipes/board-status-validation.pipe';
+import { User } from 'src/auth/user.entity';
 
 @Injectable()
 export class BoardsService {
@@ -31,8 +32,8 @@ export class BoardsService {
   //   return board;
   // }
 
-  createBoard(createBoardDto: CreateBoardDto): Promise<Board> {
-    return this.boardRepository.createBoard(createBoardDto);
+  createBoard(createBoardDto: CreateBoardDto, user: User): Promise<Board> {
+    return this.boardRepository.createBoard(createBoardDto, user);
   }
 
   getBoardById(id: number): Promise<Board> {
