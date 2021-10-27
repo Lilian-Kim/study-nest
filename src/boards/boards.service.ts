@@ -40,16 +40,16 @@ export class BoardsService {
     return this.boardRepository.getBoardById(id);
   }
 
-  deleteBoardById(id: number): void {
-    this.boardRepository.deleteBoardById(id);
+  deleteBoardById(id: number, user: User): void {
+    this.boardRepository.deleteBoardById(id, user);
   }
 
   updateBoardStatus(id: number, status: BoardStatus): Promise<Board> {
     return this.boardRepository.updateBoardStatus(id, status);
   }
 
-  getAllBoards(): Promise<Board[]> {
-    return this.boardRepository.getBoards();
+  getAllBoards(user: User): Promise<Board[]> {
+    return this.boardRepository.getBoards(user);
   }
   // getBoardById(id: string) {
   //   const board = this.boards.find((board) => board.id === id);

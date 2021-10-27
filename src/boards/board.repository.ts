@@ -28,9 +28,12 @@ export class BoardRepository extends Repository<Board> {
     return board;
   }
 
-  async deleteBoardById(id: number): Promise<void> {
-    const board = await this.getBoardById(id);
-    await this.delete(board.id);
+  async deleteBoardById(id: number, user: User): Promise<void> {
+    // const board = await this.getBoardById(id);
+    const result = await this.delete({ id, user });
+    if (result.affected === 0) {
+      throw new NotFoundException(`게시글을 찾을 수 없습니다. ${id}`);
+    }
   }
 
   async updateBoardStatus(id: number, status: BoardStatus): Promise<Board> {
@@ -40,7 +43,11 @@ export class BoardRepository extends Repository<Board> {
     return board;
   }
 
-  async getBoards(): Promise<Board[]> {
-    return await this.find();
+  async getBoards(user: User): Promise<Board[]> {
+    const query = this.createQueryBuilder('board');
+    query.where('board.userId = :userId', { userId: user.id });
+    const boards = await query.getMany();
+    return boards;
+    // return await this.find();
   }
 }

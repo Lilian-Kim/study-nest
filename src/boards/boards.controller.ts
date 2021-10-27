@@ -31,9 +31,16 @@ export class BoardsController {
   //   return this.boardsService.getAllBoards();
   // }
 
+  // 모든 게시글
+  // @Get('/')
+  // getAllBoards(): Promise<Board[]> {
+  //   return this.boardsService.getAllBoards();
+  // }
+
+  //내가 쓴 게시글
   @Get('/')
-  getAllBoards(): Promise<Board[]> {
-    return this.boardsService.getAllBoards();
+  getAllBoards(@GetUser() user: User): Promise<Board[]> {
+    return this.boardsService.getAllBoards(user);
   }
 
   @Post()
@@ -62,8 +69,8 @@ export class BoardsController {
   // }
 
   @Delete('/:id')
-  deleteBoardById(@Param('id') id: number): void {
-    this.boardsService.deleteBoardById(id);
+  deleteBoardById(@Param('id') id: number, @GetUser() user: User): void {
+    this.boardsService.deleteBoardById(id, user);
   }
 
   @Patch('/:id/status')
